@@ -12,11 +12,11 @@ spec:
     volumeMounts:
     - mountPath: /usr/share/nginx/html
       name: sample
-  initContainers:
-  - name: redhat
-    image: rkalluru/learnk8s:init-container-html-generator
-    volumeMounts:
-    - mountPath: /opt
-      name: sample
+#   initContainers:
+#   - name: redhat
+#     image: rkalluru/learnk8s:init-container-html-generator
+#     volumeMounts:
+#     - mountPath: /opt
+#       name: sample
 
 
