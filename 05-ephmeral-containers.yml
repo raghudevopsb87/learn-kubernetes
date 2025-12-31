@@ -19,3 +19,5 @@ spec:
     image: rkalluru/learnk8s:rhel9-bare
 
 
+# At cases where we need to be in container to troubleshoot.
+# kubectl debug -it --attach=true -c debug --image=redhat/ubi9 ephmeral-container-example
