@@ -19,5 +19,14 @@ spec:
       - name: nginx
         image: nginx
 
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: same-label-as-rs
+spec:
+  containers:
+  - name: nginx
+    image: nginx
 
 
