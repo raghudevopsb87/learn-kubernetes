@@ -7,4 +7,15 @@ spec:
     - name: sample
       image: docker.io/rkalluru/ephmeral-practice
 
+# Debug from another pod
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+spec:
+  containers:
+  - name: redhat
+    image: rkalluru/learnk8s:rhel9-bare
+
 
