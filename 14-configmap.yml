@@ -71,7 +71,7 @@ data:
   config: |
     player_initial_lives="3"
     score="5000"
-    name=John"
+    name="John"
 ---
 apiVersion: v1
 kind: Pod
