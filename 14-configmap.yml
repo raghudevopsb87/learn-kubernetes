@@ -68,7 +68,7 @@ kind: ConfigMap
 metadata:
   name: game-demo-1
 data:
-  mykeys: |
+  config: |
     player_initial_lives="3"
     score="5000"
     name=John"
