@@ -31,5 +31,16 @@ spec:
             configMapKeyRef:
               name: game-demo
               key: name
-
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-demo2
+spec:
+  containers:
+    - name: demo
+      image: rkalluru/learnk8s:rhel9-bare
+      envFrom:
+        - configMapRef:
+            name: game-demo
 
