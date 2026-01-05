@@ -44,7 +44,19 @@ spec:
     - protocol: TCP
       port: 80 # Service Port
       targetPort: 80 # Container Port
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-lb
+spec:
+  type: LoadBalancer
+  selector:
+    topic: services
+  ports:
+    - protocol: TCP
+      port: 80 # Service Port
+      targetPort: 80 # Container Port
 
 
 
