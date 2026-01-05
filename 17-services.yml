@@ -31,6 +31,20 @@ spec:
   containers:
   - name: redhat
     image: rkalluru/learnk8s:rhel9-bare
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-np
+spec:
+  type: NodePort
+  selector:
+    topic: services
+  ports:
+    - protocol: TCP
+      port: 80 # Service Port
+      targetPort: 80 # Container Port
+
 
 
 
