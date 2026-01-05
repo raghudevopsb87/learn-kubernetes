@@ -25,6 +25,8 @@ spec:
     - protocol: TCP
       port: 3000 # Service Port
       targetPort: 3000 # Container Port
+      name: p1
     - protocol: TCP
       port: 4000 # Service Port
       targetPort: 4000 # Container Port
+      name: p2
