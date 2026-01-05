@@ -64,7 +64,8 @@ metadata:
   name: service-en
 spec:
   type: ExternalName
-  externalName: aa2f68314191a4ac78d894dbff0553e3-1237491508.us-east-1.elb.amazonaws.com
+  externalName: www.columbia.edu
+  #externalName: aa2f68314191a4ac78d894dbff0553e3-1237491508.us-east-1.elb.amazonaws.com
 
 
 
