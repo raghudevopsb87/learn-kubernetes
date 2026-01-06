@@ -1,0 +1,392 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend
+data:
+  CATALOGUE_HOST : "catalogue"
+  CATALOGUE_PORT : "8080"
+  USER_HOST      : "user"
+  USER_PORT      : "8080"
+  CART_HOST      : "cart"
+  CART_PORT      : "8080"
+  SHIPPING_HOST  : "shipping"
+  SHIPPING_PORT  : "8080"
+  PAYMENT_HOST   : "payment"
+  PAYMENT_PORT   : "8080"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalogue
+data:
+  MONGO       : "true"
+  MONGO_URL   : "mongodb://mongodb-dev.rdevopsb87.online:27017/catalogue"
+  DB_TYPE     : "mongo"
+  APP_GIT_URL : "https://github.com/roboshop-devops-project-v3/catalogue"
+  DB_HOST     : "mongodb-dev.rdevopsb87.online"
+  SCHEMA_FILE : "db/master-data.js"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cart
+data:
+  REDIS_HOST     : "redis-dev.rdevopsb87.online"
+  CATALOGUE_HOST : "catalogue"
+  CATALOGUE_PORT : "8080"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user
+data:
+  MONGO     : "true"
+  REDIS_URL : "redis://redis-dev.rdevopsb87.online:6379"
+  MONGO_URL : "mongodb://mongodb-dev.rdevopsb87.online:27017/users"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shipping
+data:
+        CART_ENDPOINT : "cart:8080"
+        DB_HOST       : "mysql-dev.rdevopsb87.online"
+        DB_USER       : "root"
+        DB_PASS       : "RoboShop@1"
+        DB_TYPE       : "mysql"
+        APP_GIT_URL   : "https://github.com/roboshop-devops-project-v3/shipping"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment
+data:
+        CART_HOST : "cart"
+        CART_PORT : "8080"
+        USER_HOST : "user"
+        USER_PORT : "8080"
+        AMQP_HOST : "rabbitmq-dev.rdevopsb87.online"
+        AMQP_USER : "roboshop"
+        AMQP_PASS : "roboshop123"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: LoadBalancer
+  selector:
+    project: roboshop
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue
+spec:
+  selector:
+    project: roboshop
+    app: catalogue
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+spec:
+  selector:
+    project: roboshop
+    app: user
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+spec:
+  selector:
+    project: roboshop
+    app: cart
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping
+spec:
+  selector:
+    project: roboshop
+    app: shipping
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+spec:
+  selector:
+    project: roboshop
+    app: payment
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    project: roboshop
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      app: frontend
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/frontend
+        envFrom:
+        - configMapRef:
+            name: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart
+  labels:
+    project: roboshop
+    app: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      app: cart
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        app: cart
+    spec:
+      containers:
+      - name: cart
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/cart
+        envFrom:
+        - configMapRef:
+            name: cart
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  labels:
+    project: roboshop
+    app: catalogue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      app: catalogue
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        app: catalogue
+    spec:
+      containers:
+      - name: catalogue
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/catalogue
+        envFrom:
+        - configMapRef:
+            name: catalogue
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  labels:
+    project: roboshop
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      app: user
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        app: user
+    spec:
+      containers:
+      - name: user
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/user
+        envFrom:
+        - configMapRef:
+            name: user
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping
+  labels:
+    project: roboshop
+    app: shipping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      app: shipping
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        app: shipping
+    spec:
+      containers:
+      - name: shipping
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/shipping
+        envFrom:
+        - configMapRef:
+            name: shipping
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment
+  labels:
+    project: roboshop
+    app: payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      app: payment
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        app: payment
+    spec:
+      containers:
+      - name: payment
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/payment
+        envFrom:
+        - configMapRef:
+            name: payment
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: catalogue-schema
+spec:
+  template:
+    spec:
+      containers:
+      - name: schema
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
+        env:
+          - name: SCHEMA_FILE
+            value: db/master-data.js
+        envFrom:
+        - configMapRef:
+            name: catalogue
+      restartPolicy: Never
+  backoffLimit: 0
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: shipping-app-user
+spec:
+  template:
+    spec:
+      containers:
+      - name: app-user
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
+        env:
+          - name: SCHEMA_FILE
+            value: db/app-user.sql
+        envFrom:
+        - configMapRef:
+            name: shipping
+      restartPolicy: Never
+  backoffLimit: 0
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: shipping-master-data
+spec:
+  template:
+    spec:
+      containers:
+      - name: master-data
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
+        env:
+          - name: SCHEMA_FILE
+            value: db/master-data.sql
+        envFrom:
+        - configMapRef:
+            name: shipping
+      restartPolicy: Never
+  backoffLimit: 0
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: shipping-schema
+spec:
+  template:
+    spec:
+      containers:
+      - name: schema
+        image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
+        env:
+          - name: SCHEMA_FILE
+            value: db/schema.sql
+        envFrom:
+        - configMapRef:
+            name: shipping
+      restartPolicy: Never
+  backoffLimit: 0
+
+
+
+
+
+
+
+
+
+
