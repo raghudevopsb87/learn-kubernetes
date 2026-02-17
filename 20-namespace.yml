@@ -12,7 +12,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod1
-  name: demo1
+  namespace: demo1
 spec:
   containers:
   - name: nginx
@@ -24,7 +24,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod2
-  name: demo2
+  namespace: demo2
 spec:
   containers:
   - name: nginx
