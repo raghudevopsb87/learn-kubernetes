@@ -31,15 +31,4 @@ spec:
     image: nginx
   - name: redhat
     image: rkalluru/learnk8s:rhel9-bare
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-ingress
-  namespace: demo1
-spec:
-  podSelector: {}
-  policyTypes:
-  - Ingress
-  - Egress
 
