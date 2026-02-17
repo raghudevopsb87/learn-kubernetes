@@ -31,15 +31,3 @@ spec:
     image: nginx
   - name: redhat
     image: rkalluru/learnk8s:rhel9-bare
-## After enabling cni
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-ingress
-  namespace: web
-spec:
-  podSelector: {}
-  policyTypes:
-  - Ingress
-  - Egress
